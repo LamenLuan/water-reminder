@@ -2,7 +2,7 @@ from datetime import datetime
 import datetime as dt
 from os.path import exists
 from time import sleep
-from winotify import Notification
+from winotify import Notification, audio
 
 CONFIG_FILE_PATH = "data"
 DEFAULT_AMOUNT_TO_DRINK = 2000
@@ -10,12 +10,15 @@ DEFAULT_SIP_AMOUNT = 250
 APP_NAME = "Water reminder"
 
 def show_toast(title: str, msg: str, duration: str):
-	Notification(
+	toast = Notification(
 		app_id=APP_NAME,
 		title=title,
 		msg=msg,
-		duration=duration
-	).show()
+		duration=duration,
+	)
+	
+	toast.set_audio(audio.Reminder, loop=False)
+	toast.show()
 
 def show_quick_toast(title: str, msg: str):
 	show_toast(title, msg, 'short')
