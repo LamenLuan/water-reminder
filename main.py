@@ -40,7 +40,7 @@ def toast_service_started():
 	show_quick_toast("Servico Iniciado", "")
 
 def toast_drink_water(sip_amount: int):
-	show_long_toast("Beba água", f"Beba {sip_amount} mls de água")
+	show_long_toast("Beba água", f"Beba {sip_amount} ml de água")
 
 def main():
 	
