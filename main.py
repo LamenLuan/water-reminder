@@ -1,3 +1,4 @@
+import configs
 import ctypes
 from datetime import datetime
 import datetime as dt
@@ -5,9 +6,6 @@ from os.path import exists
 from time import sleep
 from winotify import Notification, audio
 
-CONFIG_FILE_PATH = "data"
-DEFAULT_AMOUNT_TO_DRINK = 2000
-DEFAULT_SIP_AMOUNT = 250
 APP_NAME = "Water reminder"
 
 def show_toast(title: str, msg: str, duration: str):
@@ -27,10 +25,6 @@ def show_quick_toast(title: str, msg: str):
 def show_long_toast(title: str, msg: str):
 	show_toast(title, msg, 'long')
 
-def write_default_data_in_file():
-	with open(CONFIG_FILE_PATH, "w") as file:
-		file.write(f"{DEFAULT_AMOUNT_TO_DRINK}\n{DEFAULT_SIP_AMOUNT}")
-
 def toast_data_file_error():
 	show_quick_toast(
 		"Erro na leitura de dados",
@@ -49,19 +43,19 @@ def minimizeWindow():
 def main():
 	minimizeWindow()
 
-	if not exists(CONFIG_FILE_PATH):
-		write_default_data_in_file()
+	if not exists(configs.CONFIG_FILE_PATH):
+		configs.write_default_data_in_file()
 
 	try:
-		with open(CONFIG_FILE_PATH, "r") as file:
+		with open(configs.CONFIG_FILE_PATH, "r") as file:
 			amount_to_drink = int(file.readline())
 			sip_amount = int(file.readline())
 		toast_service_started()
 	except ValueError:
-		amount_to_drink = DEFAULT_AMOUNT_TO_DRINK
-		sip_amount = DEFAULT_SIP_AMOUNT
+		amount_to_drink = configs.DEFAULT_AMOUNT_TO_DRINK
+		sip_amount = configs.DEFAULT_SIP_AMOUNT
 		toast_data_file_error()
-		write_default_data_in_file()
+		configs.write_default_data_in_file()
 
 	amount_of_sips = int(amount_to_drink / sip_amount)
 
