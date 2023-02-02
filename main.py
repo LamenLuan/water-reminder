@@ -1,3 +1,4 @@
+import ctypes
 from datetime import datetime
 import datetime as dt
 from os.path import exists
@@ -42,8 +43,12 @@ def toast_service_started():
 def toast_drink_water(sip_amount: int):
 	show_long_toast("Beba água", f"Beba {sip_amount} ml de água")
 
+def minimizeWindow():
+	ctypes.windll.user32.ShowWindow(ctypes.windll.kernel32.GetConsoleWindow(), 0)
+
 def main():
-	
+	minimizeWindow()
+
 	if not exists(CONFIG_FILE_PATH):
 		write_default_data_in_file()
 
