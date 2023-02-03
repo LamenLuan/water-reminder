@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 
 class WaterTime:
 	def __init__(self, date_time_str: str) -> None:
