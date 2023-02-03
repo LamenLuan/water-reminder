@@ -6,11 +6,11 @@ from os.path import exists
 from time import sleep
 from winotify import Notification, audio
 
-APP_NAME = "Water reminder"
+from watertime import WaterTime
 
 def show_toast(title: str, msg: str, duration: str):
 	toast = Notification(
-		app_id=APP_NAME,
+		app_id=configs.APP_NAME,
 		title=title,
 		msg=msg,
 		duration=duration,
@@ -50,19 +50,19 @@ def main():
 		with open(configs.CONFIG_FILE_PATH, "r") as file:
 			amount_to_drink = int(file.readline())
 			sip_amount = int(file.readline())
+			times = [WaterTime(time) for time in file.readlines()]
 		toast_service_started()
+
 	except ValueError:
 		amount_to_drink = configs.DEFAULT_AMOUNT_TO_DRINK
 		sip_amount = configs.DEFAULT_SIP_AMOUNT
+		times = configs.TIMES
 		toast_data_file_error()
 		configs.write_default_data_in_file()
 
 	amount_of_sips = int(amount_to_drink / sip_amount)
 
-	start_time_1 = datetime.now().replace(hour=7, minute=30, second=0, microsecond=0)
-	lunch_time = datetime.now().replace(hour=12, minute=0, second=0, microsecond=0)
-	start_time_2 = datetime.now().replace(hour=13, minute=15, second=0, microsecond=0)
-	end_time = datetime.now().replace(hour=17, minute=30, second=0, microsecond=0)
+	start_time_1, lunch_time, start_time_2, end_time = map(WaterTime.to_datetime, times)
 
 	total_seconds = (lunch_time - start_time_1 + end_time - start_time_2).total_seconds()
 
